@@ -12,4 +12,6 @@ public interface Dishes4SubjectProjection {
     Integer getId();
 
     String getName();
+
+    int getStatus();
 }

@@ -7,7 +7,6 @@ import cn.springlogic.cookbook.jpa.entity.Progress;
 import cn.springlogic.cookbook.jpa.repository.DishesCollectionRepository;
 import cn.springlogic.cookbook.jpa.repository.DishesFavorRepository;
 import cn.springlogic.cookbook.jpa.repository.DishesRepository;
-import cn.springlogic.social.jpa.entity.Topic;
 import cn.springlogic.social.util.SortListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
@@ -81,11 +80,17 @@ public class DishesRestController {
     @ResponseBody
     @GetMapping(value = "/search/custom-name")
     public ResponseEntity<PagedResources<PersistentEntityResource>> customSearchByName(@RequestParam(value = "userId", required = false) Integer userId,
-                                                                                       @RequestParam(value = "name") String name,
+                                                                                       @RequestParam(value = "name", required = false) String name,
                                                                                        Pageable pageable,
                                                                                        PersistentEntityResourceAssembler resourceAssembler) {
 
-        Page<Dishes> page = dishesRepository.findByNameContaining(name, pageable);
+        Page<Dishes> page;
+        // 菜品名称查找值没有的情况下，默认查所有所有菜品
+        if (null != name && !"".equals(name) && !"".equals(name.trim())) {
+            page = dishesRepository.findByNameContaining(name, pageable);
+        } else {
+            page = dishesRepository.findAllLocal(pageable);
+        }
 
         Page<Dishes> customDishesPage = page.map(new CustomDishesConverter(userId, dishesFavorRepository, dishesCollectionRepository));
 

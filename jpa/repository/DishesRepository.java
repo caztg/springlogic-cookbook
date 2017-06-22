@@ -21,6 +21,7 @@ import java.util.List;
 public interface DishesRepository extends JpaRepository<Dishes, Integer> {
 
     @RestResource(path = "name")
+    @Query("SELECT d FROM Dishes d WHERE d.name LIKE CONCAT('%',:name,'%') AND d.status=2")
     Page<Dishes> findByNameContaining(@Param("name") String name, Pageable pageable);
 
     @RestResource(path = "subject")
@@ -28,11 +29,11 @@ public interface DishesRepository extends JpaRepository<Dishes, Integer> {
 
     // 等价上面的 findBySubjects 效果
     // @Query(value = "select distinct d from Dishes d, Subject s where d in elements(s.dishes) and s.id = ?1") // 另一种写法
-    @Query("select distinct d from Dishes d inner join d.subjects s where s.id = :subjectId")
+    @Query("select distinct d from Dishes d inner join d.subjects s where s.id = :subjectId and d.status=2")
     @RestResource(exported = false)
     Page<Dishes> findBySubject(@Param("subjectId") Integer subjectId, Pageable pageable);
 
-    @Query("select d from Dishes d where d.local is null")
+    @Query("select d from Dishes d where d.local is null and d.status=2")
     @RestResource(exported = false)
     Page<Dishes> findAllLocal(Pageable pageable);
 
@@ -41,10 +42,10 @@ public interface DishesRepository extends JpaRepository<Dishes, Integer> {
     Page<Dishes> findAllCollection(@Param("uid")Integer uid,Pageable pageable);
 
 
-    @Query("select distinct d from Dishes d where d.name LIKE CONCAT('%',:name,'%') AND (:status IS NULL OR d.status = :status) AND (:creator IS NULL OR d.creator.nickName LIKE CONCAT('%',:creator,'%')) ORDER BY d.createTime DESC ")
+    @Query("select distinct d from Dishes d where d.name LIKE CONCAT('%',:name,'%') AND (:status IS NULL OR d.status = :status) AND (:creator IS NULL OR d.creator.nickName LIKE CONCAT('%',:creator,'%')) AND d.local IS NULL ORDER BY d.createTime DESC ")
     Page<Dishes> findAllDishes(@Param("name")String name,@Param("creator")String creator,@Param("status")Integer status, Pageable pageable);
 
-    @Query("SELECT DISTINCT d from Dishes d where d.name LIKE CONCAT('%',:name,'%') AND (:status IS NULL OR d.status = :status) AND d.auditor.nickName LIKE CONCAT('%',:auditor,'%')  AND (:creator IS NULL OR d.creator.nickName LIKE CONCAT('%',:creator,'%')) ORDER BY d.createTime DESC")
+    @Query("SELECT DISTINCT d from Dishes d where d.name LIKE CONCAT('%',:name,'%') AND (:status IS NULL OR d.status = :status) AND d.auditor.nickName LIKE CONCAT('%',:auditor,'%')  AND (:creator IS NULL OR d.creator.nickName LIKE CONCAT('%',:creator,'%')) AND d.local IS NULL ORDER BY d.createTime DESC")
     Page<Dishes> findByAuditor(@Param("name")String name,@Param("creator")String creator,@Param("auditor")String auditor,@Param("status")Integer status, Pageable pageable);
 
 }

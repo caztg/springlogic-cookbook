@@ -15,4 +15,6 @@ public interface MeasurementProjection {
     String getName();
 
     Date getCreateTime();
+
+    String getLanguage();
 }

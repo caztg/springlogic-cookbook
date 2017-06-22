@@ -30,4 +30,6 @@ public interface AdminDishesProjection {
     UserPrizeLogProjection getAuditor();
 
     int getStatus();
+
+    String getLanguage();
 }

@@ -16,4 +16,6 @@ public interface MaterialAdminProjection {
     String getName();
 
     Date getCreateTime();
+
+    String getLanguage();
 }

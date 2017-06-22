@@ -2,7 +2,7 @@ package cn.springlogic.cookbook.jpa.entity.projection;
 
 import cn.springlogic.cookbook.jpa.entity.Dishes;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fitcooker.app.AppDataPreFixSerializer;
+import com.fitcooker.app.serializer.AppDataPreFixSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.rest.core.config.Projection;
 
@@ -26,6 +26,8 @@ public interface DishesFullProjection {
     String getLanguage();
 
     Date getCreateTime();
+
+    int getStatus();
 
     Date getUpdateTime();
 

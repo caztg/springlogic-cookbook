@@ -3,7 +3,7 @@ package cn.springlogic.cookbook.jpa.entity.projection;
 import cn.springlogic.cookbook.jpa.entity.Subject;
 import cn.springlogic.vip.jpa.entity.rest.UserPrizeLogProjection;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fitcooker.app.AppDataPreFixSerializer;
+import com.fitcooker.app.serializer.AppDataPreFixSerializer;
 import org.springframework.data.rest.core.config.Projection;
 
 import java.util.Date;
@@ -23,5 +23,7 @@ public interface SubjectAdminFullProjection {
     Date getCreateTime();
 
     UserPrizeLogProjection getCreator();
+
+    String getLanguage();
 
 }
